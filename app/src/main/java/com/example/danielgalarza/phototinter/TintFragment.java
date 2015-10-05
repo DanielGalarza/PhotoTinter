@@ -45,13 +45,12 @@ public class TintFragment extends Fragment {  //extends Fragment
 
     private ArrayList<OneColor> mColors;
 
-    public static final String EXTRA_COLOR_ONE = "com.example.danielgalarza.phototinter.color_one";
-    public static final String EXTRA_COLOR_TWO = "com.example.danielgalarza.phototinter.color_two";
+    public static final String EXTRA_COLOR = "com.example.danielgalarza.phototinter.color_one";
 
 
-    //public static final int PHOTO_REQ = 0;
-    //public static final int COLOR_ONE_REQ = 1;
-    //public static final int COLOR_TWO_REQ = 2;
+    public static final int PHOTO_REQ = 0;
+    public static final int COLOR_ONE_REQ = 1;
+    public static final int COLOR_TWO_REQ = 2;
 
 
     //default values for the color buttons
@@ -68,7 +67,7 @@ public class TintFragment extends Fragment {  //extends Fragment
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.app_name);
         mColors = ColorLab.get(getActivity()).getColors();
-        //color = getActivity().getIntent().getIntExtra(EXTRA_COLOR_ONE, defaultColorOne);
+        //color = getActivity().getIntent().getIntExtra(EXTRA_COLOR, defaultColorOne);
 
 
     }
@@ -80,8 +79,8 @@ public class TintFragment extends Fragment {  //extends Fragment
         View v = inflater.inflate(R.layout.photo_fragment, parent, false);
 
         //Intent intent = new Intent(getActivity(), ColorPickerAppActivity.class);
-        colorOne = getActivity().getIntent().getIntExtra(EXTRA_COLOR_ONE, defaultColorOne);
-        colorTwo = getActivity().getIntent().getIntExtra(EXTRA_COLOR_TWO, defaultColorTwo);
+        //colorOne = getActivity().getIntent().getIntExtra(EXTRA_COLOR, defaultColorOne);
+        //colorTwo = getActivity().getIntent().getIntExtra(EXTRA_COLOR, defaultColorTwo);
 
         /**********************************************************************************/
         mImageView = (ImageView)v.findViewById(R.id.photo);
@@ -114,13 +113,7 @@ public class TintFragment extends Fragment {  //extends Fragment
             public void onClick(View view) {
 
                 Intent intent = new Intent(getActivity(), ColorPickerAppActivity.class);
-
-                //colorOne = getActivity().getIntent().getIntExtra(EXTRA_COLOR_ONE, defaultColorOne);
-
-                //mColor1.setBackgroundColor(color);
-
                 startActivityForResult(intent, 1);
-
 
             }
         });
@@ -135,13 +128,7 @@ public class TintFragment extends Fragment {  //extends Fragment
             public void onClick(View view) {
 
                 Intent intent = new Intent(getActivity(), ColorPickerAppActivity.class);
-
-                //colorTwo = getActivity().getIntent().getIntExtra(EXTRA_COLOR_TWO, defaultColorTwo);
-
-                //mColor2.setBackgroundColor(color);
-
                 startActivityForResult(intent, 2);
-
 
             }
         });
@@ -169,13 +156,11 @@ public class TintFragment extends Fragment {  //extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-
-
         super.onActivityResult(requestCode, resultCode, data);
 
         if(resultCode == getActivity().RESULT_OK) {
 
-            if (requestCode == 0) {
+            if (requestCode == PHOTO_REQ) {
 
                 Uri selectedImage = data.getData();
                 String[] filePath = {MediaStore.Images.Media.DATA};
@@ -191,47 +176,30 @@ public class TintFragment extends Fragment {  //extends Fragment
 
             }
 
-            else if (requestCode == 1) {
+            else if (requestCode == COLOR_ONE_REQ) {
 
-                //setColorOne();
+                colorOne = data.getIntExtra(EXTRA_COLOR, defaultColorOne);
+                mColor1.setBackgroundColor(colorOne);
 
-
-                Log.d("COLOR_ONE_REQ: ", "color 1 clicked");
 
             }
 
-            else if (requestCode == 2) {
+            else if (requestCode == COLOR_TWO_REQ) {
 
-                //setColorTwo();
+                colorTwo = data.getIntExtra(EXTRA_COLOR, defaultColorTwo);
+                mColor2.setBackgroundColor(colorTwo);
 
             }
 
             else;
-
 
         }
 
 
     }
 
-    /*
-    public void setColorOne(){
-        colorOne = color;
-    }
 
-    public void setColorTwo(){
-        colorTwo = color;
-    }
-*/
-    @Override
-    public void onResume() {
-        super.onResume();
 
-        mColor1.setBackgroundColor(colorOne);
-
-        mColor2.setBackgroundColor(colorTwo);
-
-    }
 
 
 }

@@ -19,12 +19,6 @@ public class ColorPickerAppActivity extends Activity {
     int bVal = 0;
 
     int color;
-    boolean toggle = false;
-
-    public static final int COLOR_ONE_REQ = 1;
-    public static final int COLOR_TWO_REQ = 2;
-
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,27 +69,15 @@ public class ColorPickerAppActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                if(!toggle) {
-                    // Making an intent to the Photo Tinter. It will send one color at
-                    Intent i = new Intent(getApplicationContext(), TintActivity.class);
-                    i.putExtra(TintFragment.EXTRA_COLOR_ONE, getColor());
-                    startActivityForResult(i, COLOR_ONE_REQ);
-                    setResult(1, i);
-                    //toggle = !toggle;
-                    //Log.d("sending color back ", "color: ");
-                    finish();
-                }
-                else {
-                    Intent i = new Intent(getApplicationContext(), TintActivity.class);
-                    i.putExtra(TintFragment.EXTRA_COLOR_TWO, getColor());
-                    startActivityForResult(i, COLOR_TWO_REQ);
-                    setResult(2, i);
-                    //toggle = !toggle;
-                    //Log.d("sending color back ", "color: ");
-                    finish();
-                }
 
-            }
+                    // Making an intent to the Photo Tinter. It will send one color at
+                    Intent i = new Intent();
+                    i.putExtra(TintFragment.EXTRA_COLOR, getColor());
+                    setResult(RESULT_OK, i);
+                    finish();
+
+
+                }
 
         });
 
