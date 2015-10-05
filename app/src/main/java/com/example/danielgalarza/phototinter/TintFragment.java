@@ -1,8 +1,6 @@
 package com.example.danielgalarza.phototinter;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.app.ListFragment;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -10,13 +8,12 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -48,14 +45,30 @@ public class TintFragment extends Fragment {  //extends Fragment
 
     private ArrayList<OneColor> mColors;
 
+    public static final String EXTRA_COLOR_ONE = "com.example.danielgalarza.phototinter.color_one";
+    public static final String EXTRA_COLOR_TWO = "com.example.danielgalarza.phototinter.color_two";
+
+
+    //public static final int PHOTO_REQ = 0;
+    //public static final int COLOR_ONE_REQ = 1;
+    //public static final int COLOR_TWO_REQ = 2;
+
+
+    //default values for the color buttons
+    int colorOne;
+    int colorTwo;
+    //int color;
+    int defaultColorOne = -1;
+    int defaultColorTwo = -1;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         getActivity().setTitle(R.string.app_name);
         mColors = ColorLab.get(getActivity()).getColors();
-
-
+        //color = getActivity().getIntent().getIntExtra(EXTRA_COLOR_ONE, defaultColorOne);
 
 
     }
@@ -65,6 +78,10 @@ public class TintFragment extends Fragment {  //extends Fragment
 
         // Used to inflate the layout (view) of the fragment containing the UI.
         View v = inflater.inflate(R.layout.photo_fragment, parent, false);
+
+        //Intent intent = new Intent(getActivity(), ColorPickerAppActivity.class);
+        colorOne = getActivity().getIntent().getIntExtra(EXTRA_COLOR_ONE, defaultColorOne);
+        colorTwo = getActivity().getIntent().getIntExtra(EXTRA_COLOR_TWO, defaultColorTwo);
 
         /**********************************************************************************/
         mImageView = (ImageView)v.findViewById(R.id.photo);
@@ -80,9 +97,9 @@ public class TintFragment extends Fragment {  //extends Fragment
 
                 // Used reference from http://developer.android.com/training/basics/intents/result.html
                 // Starting an intent to the photo gallery on the device.
-                Intent intent = new Intent(Intent.ACTION_PICK, android.provider
-                                    .MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, 1);
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(intent, 0);
             }
         });
 
@@ -90,9 +107,44 @@ public class TintFragment extends Fragment {  //extends Fragment
         mTintButton = (Button)v.findViewById(R.id.tint_button);
 
         /**********************************************************************************/
+        mColor1 = (Button)v.findViewById(R.id.color1_button);
+        mColor1.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), ColorPickerAppActivity.class);
+
+                //colorOne = getActivity().getIntent().getIntExtra(EXTRA_COLOR_ONE, defaultColorOne);
+
+                //mColor1.setBackgroundColor(color);
+
+                startActivityForResult(intent, 1);
+
+
+            }
+        });
+
+        //mColor1.setBackgroundColor(color);
 
         /**********************************************************************************/
+        mColor2 = (Button)v.findViewById(R.id.color2_button);
+        mColor2.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), ColorPickerAppActivity.class);
+
+                //colorTwo = getActivity().getIntent().getIntExtra(EXTRA_COLOR_TWO, defaultColorTwo);
+
+                //mColor2.setBackgroundColor(color);
+
+                startActivityForResult(intent, 2);
+
+
+            }
+        });
 
 
         /**********************************************************************************/
@@ -113,63 +165,73 @@ public class TintFragment extends Fragment {  //extends Fragment
 
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+
+
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == getActivity().RESULT_OK)
-        {
-            Uri selectedImage = data.getData();
-            String[] filePath = { MediaStore.Images.Media.DATA };
-            Cursor c = getActivity().getContentResolver().query(selectedImage,filePath, null, null, null);
-            c.moveToFirst();
+        if(resultCode == getActivity().RESULT_OK) {
 
-            int columnIndex = c.getColumnIndex(filePath[0]);
-            photoPath = c.getString(columnIndex);
-            c.close();
-            mPhoto = (BitmapFactory.decodeFile(photoPath));
-            mImageView.setImageBitmap(mPhoto);
+            if (requestCode == 0) {
+
+                Uri selectedImage = data.getData();
+                String[] filePath = {MediaStore.Images.Media.DATA};
+                Cursor c = getActivity().getContentResolver().query(selectedImage, filePath, null, null, null);
+                c.moveToFirst();
+                Log.d("choosing pic: ", "pic was clicked");
+
+                int columnIndex = c.getColumnIndex(filePath[0]);
+                photoPath = c.getString(columnIndex);
+                c.close();
+                mPhoto = (BitmapFactory.decodeFile(photoPath));
+                mImageView.setImageBitmap(mPhoto);
+
+            }
+
+            else if (requestCode == 1) {
+
+                //setColorOne();
+
+
+                Log.d("COLOR_ONE_REQ: ", "color 1 clicked");
+
+            }
+
+            else if (requestCode == 2) {
+
+                //setColorTwo();
+
+            }
+
+            else;
+
+
         }
+
+
     }
 
-    /*@Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
+    /*
+    public void setColorOne(){
+        colorOne = color;
+    }
 
-        //Note n = (Note)(getListAdapter()).getItem(position);
-        //Note n = ((NoteAdapter)getListAdapter()).getItem(position);
-        //will display message to console when list item is clicked
-        //Log.d(TAG, n.getTitle() + " was clicked");
+    public void setColorTwo(){
+        colorTwo = color;
+    }
+*/
+    @Override
+    public void onResume() {
+        super.onResume();
 
-    } */
+        mColor1.setBackgroundColor(colorOne);
 
-    ///////////////////////////////////////////////
-   /* private class ListAdapter extends ArrayAdapter<> {
-        public ListAdapter(ArrayList<> notes) {
-            super(getActivity(), 0, notes);
-        }
+        mColor2.setBackgroundColor(colorTwo);
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+    }
 
-            // If we weren't given a view, inflate one
-            if (convertView == null) {
-                convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.photo_fragment, null);
-            }
-            // Configure the view for this Crime
-            //Note n = getItem(position);
 
-            TextView mFragTitle = (TextView)convertView.findViewById(R.id.item_title);
-            //mFragTitle.setText(n.getTitle());
-
-            //TextView mFragDetails = (TextView)convertView.findViewById(R.id.frag_details);
-            //mFragDetails.setText(n.getD());
-            //String mTitle;
-            //int mFragTitle;
-            //int mDetails;
-
-            return convertView;
-        }
-    }*/
 }

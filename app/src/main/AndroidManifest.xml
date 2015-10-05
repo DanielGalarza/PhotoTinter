@@ -24,6 +24,11 @@
             </intent-filter>
 
         </activity>
+        <activity
+            android:name=".ColorPickerAppActivity"
+            android:label="@string/color_app_name" >
+
+        </activity>
 
     </application>
 
