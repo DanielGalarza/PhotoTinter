@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Photo Tinter</string>
+    <string name="action_settings">Settings</string>
+    <string name="button_color1">COLOR    1</string>
+    <string name="button_color2">COLOR    2</string>
+
+
+</resources>
