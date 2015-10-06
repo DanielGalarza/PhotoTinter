@@ -29,7 +29,7 @@ public class ColorPickerAppActivity extends Activity {
         final NumberPicker mNumberPickerB = (NumberPicker) findViewById(R.id.numPicker_B);
         final Button mButton = (Button)findViewById(R.id.get_button);
 
-
+        // NumberPicker for Red color value
         mNumberPickerR.setMaxValue(255);
         mNumberPickerR.setMinValue(0);
         mNumberPickerR.setWrapSelectorWheel(true);
@@ -41,7 +41,7 @@ public class ColorPickerAppActivity extends Activity {
             }
         });
 
-
+        // NumberPicker for Green color value
         mNumberPickerG.setMaxValue(255);
         mNumberPickerG.setMinValue(0);
         mNumberPickerG.setWrapSelectorWheel(true);
@@ -53,6 +53,7 @@ public class ColorPickerAppActivity extends Activity {
             }
         });
 
+        // NumberPicker for Blue color value
         mNumberPickerB.setMaxValue(255);
         mNumberPickerB.setMinValue(0);
         mNumberPickerB.setWrapSelectorWheel(true);
@@ -64,11 +65,11 @@ public class ColorPickerAppActivity extends Activity {
             }
         });
 
+        // Button to select chosen color and send color-value via intent
         mButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-
 
                     // Making an intent to the Photo Tinter. It will send one color at
                     Intent i = new Intent();
@@ -76,22 +77,23 @@ public class ColorPickerAppActivity extends Activity {
                     setResult(RESULT_OK, i);
                     finish();
 
-
                 }
-
         });
 
     }//end onCreate
 
-
+    //  Changes/Overrides color of preview pallet
     private void setColor(int rVal, int gVal, int bVal) {
         Log.i("SettingColor", "Red: " + rVal + " Green: " + gVal + " Blue: " + bVal);
         color = Color.rgb(rVal, gVal, bVal);
         View bgElement = findViewById(R.id.myRectangleView);
         bgElement.setBackgroundColor(color);
-
     }
 
+    // Get/Return integer color value of selected color
+    public int getColor() {
+        return color;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,12 +116,6 @@ public class ColorPickerAppActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-    public int getColor() {
-        return color;
-    }
-
 
 
 }
