@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,8 +30,10 @@ public class TintFragment extends Fragment {  //extends Fragment
 
     private Button mPhotoChooser;
     private Button mTintButton;
-    private Button mColor1;
-    private Button mColor2;
+    private Button mButtonColor1;
+    private Button mButtonColor2;
+    private int mColor1;
+    private int mColor2;
 
     private SeekBar mBlender;
     private TextView mBlendedColor;
@@ -79,6 +82,8 @@ public class TintFragment extends Fragment {  //extends Fragment
         // Used to inflate the layout (view) of the fragment containing the UI.
         View v = inflater.inflate(R.layout.photo_fragment, parent, false);
 
+        mBlendedColor = (TextView) v.findViewById(R.id.blended_color);
+
 
         /* *********************************************************************************/
         mImageView = (ImageView)v.findViewById(R.id.photo);
@@ -106,8 +111,8 @@ public class TintFragment extends Fragment {  //extends Fragment
         /* *********************************************************************************
          * BUTTON LEFT: CHOOSE COLOR #1 - LAUNCH COLOR-PICKER - WAIT FOR RESPONSE INTENT
          **********************************************************************************/
-        mColor1 = (Button)v.findViewById(R.id.color1_button);
-        mColor1.setOnClickListener(new View.OnClickListener() {
+        mButtonColor1 = (Button)v.findViewById(R.id.color1_button);
+        mButtonColor1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -119,8 +124,8 @@ public class TintFragment extends Fragment {  //extends Fragment
         /* *********************************************************************************
          * BUTTON RIGHT: CHOOSE COLOR #2 - LAUNCH COLOR-PICKER - WAIT FOR RESPONSE INTENT
          **********************************************************************************/
-        mColor2 = (Button)v.findViewById(R.id.color2_button);
-        mColor2.setOnClickListener(new View.OnClickListener() {
+        mButtonColor2 = (Button)v.findViewById(R.id.color2_button);
+        mButtonColor2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -129,8 +134,35 @@ public class TintFragment extends Fragment {  //extends Fragment
 
             }
         });
-        /* *********************************************************************************/
+        /* *********************************************************************************
+         * SEEK BAR - BLEND COLORS based on value of seek-bar
+         **********************************************************************************/
+        mBlender = (SeekBar)v.findViewById(R.id.seekBar);
+        mBlender.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
+            int seekValue = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                seekValue = progress;
+
+                // UPDATE COLOR WITH SEEK-BAR VALUE
+                update(seekBar);
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+
+        });
+        update(mBlender);
 
         /* *********************************************************************************/
 
@@ -146,6 +178,34 @@ public class TintFragment extends Fragment {  //extends Fragment
         return v;
 
     }/*** END UI CONTENTS *** END onCreateView() ***/
+
+
+    /**********************************************/
+    private void update(final SeekBar mBlender) {
+
+        mBlendedColor = (TextView) mBlendedColor.findViewById(R.id.blended_color);
+
+        final int colorStart = colorOne;
+        final int colorEnd = colorTwo;
+
+        mBlendedColor.setBackgroundColor(interpolateColor(colorStart, colorEnd, mBlender.getProgress() / 100f));
+
+    }
+
+    private float interpolate(final float a, final float b, final float proportion){
+        return (a + ((b-a) * proportion));
+    }
+
+    private int interpolateColor(final int a, final int b, final float proportion){
+        final float[] hsva = new float[3];
+        final float[] hsvb = new float[3];
+        Color.colorToHSV(a, hsva);
+        Color.colorToHSV(b, hsvb);
+        for (int i = 0; i < 3; i++){
+            hsvb[i] = interpolate(hsva[i], hsvb[i], proportion);
+        }
+        return Color.HSVToColor(hsvb);
+    }
 
     /**********************************************
      * HANDLE INTENTS FOR MULTIPLE REQUEST-CODES  *
@@ -176,14 +236,14 @@ public class TintFragment extends Fragment {  //extends Fragment
             else if (requestCode == COLOR_ONE_REQ) {
                 colorOne = data.getIntExtra(EXTRA_COLOR, defaultColorOne);
                 //update left button (1) color
-                mColor1.setBackgroundColor(colorOne);
+                mButtonColor1.setBackgroundColor(colorOne);
             }
 
             // Handle color picker result for button two
             else if (requestCode == COLOR_TWO_REQ) {
                 colorTwo = data.getIntExtra(EXTRA_COLOR, defaultColorTwo);
                 //update right button (2) color
-                mColor2.setBackgroundColor(colorTwo);
+                mButtonColor2.setBackgroundColor(colorTwo);
             }
 
             else;
