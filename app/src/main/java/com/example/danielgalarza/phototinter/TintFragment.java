@@ -51,17 +51,17 @@ public class TintFragment extends Fragment {  //extends Fragment
 
     public static final String EXTRA_COLOR = "com.example.danielgalarza.phototinter.color_one";
 
-
+    //Request codes to handle activity results
     public static final int PHOTO_REQ = 0;
     public static final int COLOR_ONE_REQ = 1;
     public static final int COLOR_TWO_REQ = 2;
 
 
     //default values for the color buttons
-    int colorOne;
-    int colorTwo;
-    int defaultColorOne = -1;
-    int defaultColorTwo = -1;
+    int colorOne = Color.WHITE;
+    int colorTwo = Color.WHITE;
+    int defaultColorOne = Color.WHITE;
+    int defaultColorTwo = Color.WHITE;
 
 
     @Override
@@ -82,10 +82,10 @@ public class TintFragment extends Fragment {  //extends Fragment
         // Used to inflate the layout (view) of the fragment containing the UI.
         View v = inflater.inflate(R.layout.photo_fragment, parent, false);
 
+        // Link mBlendedColor to color swatch 'blended_color' view
         mBlendedColor = (TextView) v.findViewById(R.id.blended_color);
 
-
-        /* *********************************************************************************/
+        // Link mImageView to the image display view/area
         mImageView = (ImageView)v.findViewById(R.id.photo);
 
         /* *********************************************************************************
@@ -118,7 +118,6 @@ public class TintFragment extends Fragment {  //extends Fragment
 
                 Intent intent = new Intent(getActivity(), ColorPickerAppActivity.class);
                 startActivityForResult(intent, 1);
-
             }
         });
         /* *********************************************************************************
@@ -131,7 +130,6 @@ public class TintFragment extends Fragment {  //extends Fragment
 
                 Intent intent = new Intent(getActivity(), ColorPickerAppActivity.class);
                 startActivityForResult(intent, 2);
-
             }
         });
         /* *********************************************************************************
@@ -180,7 +178,9 @@ public class TintFragment extends Fragment {  //extends Fragment
     }/*** END UI CONTENTS *** END onCreateView() ***/
 
 
-    /**********************************************/
+    /******************************************
+     * UPDATE COLOR OF TEXT-VIEW COLOR PALLET *
+     ******************************************/
     private void update(final SeekBar mBlender) {
 
         mBlendedColor = (TextView) mBlendedColor.findViewById(R.id.blended_color);
@@ -192,6 +192,9 @@ public class TintFragment extends Fragment {  //extends Fragment
 
     }
 
+    /**************************************************************
+     * COLOR BLENDING HANDLED BY THE NEXT TWO INTERPOLATE METHODS *
+     **************************************************************/
     private float interpolate(final float a, final float b, final float proportion){
         return (a + ((b-a) * proportion));
     }
@@ -206,10 +209,11 @@ public class TintFragment extends Fragment {  //extends Fragment
         }
         return Color.HSVToColor(hsvb);
     }
+    /********* END COLOR BLEND - INTERPOLATION ALGORITHM *********/
 
-    /**********************************************
-     * HANDLE INTENTS FOR MULTIPLE REQUEST-CODES  *
-     **********************************************/
+    /**************************************************************
+     ******** HANDLE INTENTS FOR MULTIPLE REQUEST-CODES ***********
+     **************************************************************/
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -219,42 +223,42 @@ public class TintFragment extends Fragment {  //extends Fragment
         if(resultCode == getActivity().RESULT_OK) {
 
             // Handle photo chooser result - display chosen image
-            if (requestCode == PHOTO_REQ) {
-                Uri selectedImage = data.getData();
-                String[] filePath = {MediaStore.Images.Media.DATA};
-                Cursor c = getActivity().getContentResolver().query(selectedImage, filePath, null, null, null);
-                c.moveToFirst();
-                Log.d("choosing pic: ", "pic was clicked");
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                photoPath = c.getString(columnIndex);
-                c.close();
-                mPhoto = (BitmapFactory.decodeFile(photoPath));
-                mImageView.setImageBitmap(mPhoto);
-            }
+            switch (requestCode) {
 
-            // Handle color picker result for button one
-            else if (requestCode == COLOR_ONE_REQ) {
-                colorOne = data.getIntExtra(EXTRA_COLOR, defaultColorOne);
-                //update left button (1) color
-                mButtonColor1.setBackgroundColor(colorOne);
-            }
+                case PHOTO_REQ:
+                    Uri selectedImage = data.getData();
+                    String[] filePath = {MediaStore.Images.Media.DATA};
+                    Cursor c = getActivity().getContentResolver().query(selectedImage, filePath, null, null, null);
+                    c.moveToFirst();
+                    Log.d("choosing pic: ", "pic was clicked");
+                    int columnIndex = c.getColumnIndex(filePath[0]);
+                    photoPath = c.getString(columnIndex);
+                    c.close();
+                    mPhoto = (BitmapFactory.decodeFile(photoPath));
+                    mImageView.setImageBitmap(mPhoto);
+                    break;
 
-            // Handle color picker result for button two
-            else if (requestCode == COLOR_TWO_REQ) {
-                colorTwo = data.getIntExtra(EXTRA_COLOR, defaultColorTwo);
-                //update right button (2) color
-                mButtonColor2.setBackgroundColor(colorTwo);
-            }
+                // Handle color picker result for button one
+                case COLOR_ONE_REQ:
+                    colorOne = data.getIntExtra(EXTRA_COLOR, defaultColorOne);
+                    //update left button (1) color
+                    mButtonColor1.setBackgroundColor(colorOne);
+                    // TODO: UPDATE COLOR SWATCH
+                    update(mBlender);
+                    break;
 
-            else;
+                // Handle color picker result for button two
+                case COLOR_TWO_REQ:
+                    colorTwo = data.getIntExtra(EXTRA_COLOR, defaultColorTwo);
+                    //update right button (2) color
+                    mButtonColor2.setBackgroundColor(colorTwo);
+                    // TODO: UPDATE COLOR SWATCH
+                    update(mBlender);
+                    break;
+            }
 
         }
+    }// END onActivityResult
+    /**********  END REQUEST-CODE LOGIC - INTENT HANDLER **********/
 
-
-    }
-
-
-
-
-
-}
+}// END MAIN: TintFragment
