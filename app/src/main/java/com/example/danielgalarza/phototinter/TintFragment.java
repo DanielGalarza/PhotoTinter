@@ -29,6 +29,7 @@ public class TintFragment extends Fragment {  //extends Fragment
 
     private Button mPhotoChooser;
     private Button mTintButton;
+    private Button mRemoveTint;
     private Button mButtonColor1;
     private Button mButtonColor2;
 
@@ -41,7 +42,7 @@ public class TintFragment extends Fragment {  //extends Fragment
     private Button mGreenTint;
     private Button mPurpleTint;
     private Button mRedTint;
-    private Button mYelloTint;
+    private Button mYellowTint;
     private Button mRandomTint;
 
     private ArrayList<OneColor> mColors;
@@ -96,23 +97,20 @@ public class TintFragment extends Fragment {  //extends Fragment
 
                 // Used reference from http://developer.android.com/training/basics/intents/result.html
                 // Starting an intent to the photo gallery on the device.
-                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider
+                                            .MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
                 startActivityForResult(intent, 0);
             }
         });
         /*********************************************************************************
          * BUTTON TINT - ADD TINT TO PHOTO
-         *
-         *
-         *    ! ! ! ! ! ! NOT TESTED ! ! ! ! ! !
-         *
          **********************************************************************************/
         mTintButton = (Button)v.findViewById(R.id.tint_button);
         mTintButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mImageView.setColorFilter(mBlendedColor);
+                mImageView.setColorFilter(addAlphaToColor(mBlendedColor));
             }
         });
 
@@ -170,17 +168,115 @@ public class TintFragment extends Fragment {  //extends Fragment
         });
         update(mBlender);
 
-        /* *********************************************************************************/
+        /**********************************************************************************/
+        mBlueTint = (Button)v.findViewById(R.id.blue_tint);
+        mBlueTint.setText(mColors.get(0).getTitle());
+        mBlueTint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int color = addAlphaToColor(mColors.get(0).getColor());
+                mImageView.setColorFilter(color);
+                mBlendedColorSwatch.setBackgroundColor(color);
+
+            }
+        });
 
 
-        /* *********************************************************************************/
+        /**********************************************************************************/
+        mGrayTint = (Button)v.findViewById(R.id.gray_tint);
+        mGrayTint.setText(mColors.get(1).getTitle());
+        mGrayTint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int color = addAlphaToColor(mColors.get(1).getColor());
+                mImageView.setColorFilter(color);
+                mBlendedColorSwatch.setBackgroundColor(color);
+
+            }
+        });
+
+        /**********************************************************************************/
+        mGreenTint = (Button)v.findViewById(R.id.green_tint);
+        mGreenTint.setText(mColors.get(2).getTitle());
+        mGreenTint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int color = addAlphaToColor(mColors.get(2).getColor());
+                mImageView.setColorFilter(color);
+                mBlendedColorSwatch.setBackgroundColor(color);
+
+            }
+        });
+
+        /**********************************************************************************/
+        mPurpleTint = (Button)v.findViewById(R.id.purple_tint);
+        mPurpleTint.setText(mColors.get(3).getTitle());
+        mPurpleTint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int color = addAlphaToColor(mColors.get(3).getColor());
+                mImageView.setColorFilter(color);
+                mBlendedColorSwatch.setBackgroundColor(color);
+
+            }
+        });
+        /**********************************************************************************/
+        mRedTint = (Button)v.findViewById(R.id.red_tint);
+        mRedTint.setText(mColors.get(4).getTitle());
+        mRedTint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int color = addAlphaToColor(mColors.get(4).getColor());
+                mImageView.setColorFilter(color);
+                mBlendedColorSwatch.setBackgroundColor(color);
 
 
-        /* *********************************************************************************/
+            }
+        });
+        /**********************************************************************************/
+        mYellowTint = (Button)v.findViewById(R.id.yellow_tint);
+        mYellowTint.setText(mColors.get(5).getTitle());
+        mYellowTint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                int color = addAlphaToColor(mColors.get(5).getColor());
+                mImageView.setColorFilter(color);
+                mBlendedColorSwatch.setBackgroundColor(color);
 
-        /* *********************************************************************************/
+            }
+        });
+        /**********************************************************************************/
+        mRandomTint = (Button)v.findViewById(R.id.random_tint);
+        mRandomTint.setText(mColors.get(6).getTitle());
+        mRandomTint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                int color = addAlphaToColor(mColors.get(6).getColor());
+                mImageView.setColorFilter(color);
+                mBlendedColorSwatch.setBackgroundColor(color);
+
+            }
+        });
+
+        /**********************************************************************************/
+        mRemoveTint = (Button)v.findViewById(R.id.remove_button);
+        mRemoveTint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mImageView.setColorFilter(0);
+
+            }
+        });
+        /**********************************************************************************/
+        // returning the view of the fragment.
         return v;
 
     }//*** END UI CONTENTS *** END onCreateView() ***/
@@ -266,5 +362,18 @@ public class TintFragment extends Fragment {  //extends Fragment
         }
     }// END onActivityResult
     //**********  END REQUEST-CODE LOGIC - INTENT HANDLER **********/
+
+    /****************************************************************************
+     ******** CHANGES A COLOR TO HAVE AN ALPHA VALUE FOR TRANSPARENCY ***********
+     ****************************************************************************/
+    public int addAlphaToColor(int color) {
+
+        int a = 127;
+        int r = Color.red(color);
+        int g = Color.green(color);
+        int b = Color.blue(color);
+
+        return Color.argb(a,r,g,b);
+    }
 
 }// END MAIN: TintFragment
