@@ -1,12 +1,14 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="fill_parent"
+    android:background="#ffd64b">
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -15,13 +17,15 @@
             android:paddingTop="30dp"
             android:text="Color Picker"
             android:textColor="#070707"
-            android:textSize="16dp" />
+            android:textSize="20sp"
+            android:layout_marginBottom="50dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"
-            android:paddingTop="50dp">
+            android:paddingTop="50dp"
+            android:layout_marginBottom="50dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -62,7 +66,7 @@
                     android:id="@+id/numPicker_G"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="20dp"
                     android:paddingRight="15dp" />
 
             </LinearLayout>
@@ -84,7 +88,7 @@
                     android:id="@+id/numPicker_B"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="20dp"
                     android:paddingRight="15dp" />
 
             </LinearLayout>
@@ -103,18 +107,20 @@
                 android:id="@+id/myRectangleView"
                 android:layout_width="332dp"
                 android:layout_height="225dp"
-                android:paddingTop="50dp"
-                android:background="@drawable/rectangle"
-                android:layout_weight="16.72"/>
+                android:background="#ffffff"
+                android:layout_weight="16.72"
+                android:layout_marginBottom="50dp"
+                android:padding="60dp"/>
 
         </LinearLayout>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Get This Color!"
+            android:text="@string/get_button_name"
             android:id="@+id/get_button"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            />
 
     </LinearLayout>
 </ScrollView>

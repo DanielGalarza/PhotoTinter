@@ -5,6 +5,8 @@
     <string name="button_color2">COLOR    2</string>
     <string name="color_app_name">ColorPicker</string>
     <string name="color_action_settings">Settings</string>
+    <string name="get_button_name">Get This Color!</string>
+
 
 
 </resources>

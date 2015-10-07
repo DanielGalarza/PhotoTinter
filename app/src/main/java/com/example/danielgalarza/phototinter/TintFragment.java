@@ -86,7 +86,7 @@ public class TintFragment extends Fragment {  //extends Fragment
         // Link mImageView to the image display view/area
         mImageView = (ImageView)v.findViewById(R.id.photo);
 
-        /* *********************************************************************************
+        /**********************************************************************************
          * BUTTON ADD PHOTO - LAUNCHES IMAGE CHOOSER - WAIT FOR RESPONSE INTENT
          * *********************************************************************************/
         mPhotoChooser = (Button)v.findViewById(R.id.photo_button);
@@ -101,12 +101,12 @@ public class TintFragment extends Fragment {  //extends Fragment
                 startActivityForResult(intent, 0);
             }
         });
-        /* *********************************************************************************
+        /*********************************************************************************
          * BUTTON TINT - ADD TINT TO PHOTO
          **********************************************************************************/
         mTintButton = (Button)v.findViewById(R.id.tint_button);
 
-        /* *********************************************************************************
+        /**********************************************************************************
          * BUTTON LEFT: CHOOSE COLOR #1 - LAUNCH COLOR-PICKER - WAIT FOR RESPONSE INTENT
          **********************************************************************************/
         mButtonColor1 = (Button)v.findViewById(R.id.color1_button);
@@ -118,7 +118,7 @@ public class TintFragment extends Fragment {  //extends Fragment
                 startActivityForResult(intent, 1);
             }
         });
-        /* *********************************************************************************
+        /**********************************************************************************
          * BUTTON RIGHT: CHOOSE COLOR #2 - LAUNCH COLOR-PICKER - WAIT FOR RESPONSE INTENT
          **********************************************************************************/
         mButtonColor2 = (Button)v.findViewById(R.id.color2_button);
@@ -130,7 +130,7 @@ public class TintFragment extends Fragment {  //extends Fragment
                 startActivityForResult(intent, 2);
             }
         });
-        /* *********************************************************************************
+        /**********************************************************************************
          * SEEK BAR - BLEND COLORS based on value of seek-bar
          **********************************************************************************/
         mBlender = (SeekBar)v.findViewById(R.id.seekBar);
@@ -228,7 +228,6 @@ public class TintFragment extends Fragment {  //extends Fragment
                     String[] filePath = {MediaStore.Images.Media.DATA};
                     Cursor c = getActivity().getContentResolver().query(selectedImage, filePath, null, null, null);
                     c.moveToFirst();
-                    Log.d("choosing pic: ", "pic was clicked");
                     int columnIndex = c.getColumnIndex(filePath[0]);
                     photoPath = c.getString(columnIndex);
                     c.close();

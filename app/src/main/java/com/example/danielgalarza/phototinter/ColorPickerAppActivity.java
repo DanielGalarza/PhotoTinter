@@ -14,9 +14,9 @@ import android.widget.NumberPicker;
 
 public class ColorPickerAppActivity extends Activity {
 
-    int rVal = 0;
-    int gVal = 0;
-    int bVal = 0;
+    int rVal;
+    int gVal;
+    int bVal;
 
     int color;
 
@@ -29,10 +29,14 @@ public class ColorPickerAppActivity extends Activity {
         final NumberPicker mNumberPickerB = (NumberPicker) findViewById(R.id.numPicker_B);
         final Button mButton = (Button)findViewById(R.id.get_button);
 
-        // NumberPicker for Red color value
+/**************************************************************************************************/
         mNumberPickerR.setMaxValue(255);
         mNumberPickerR.setMinValue(0);
+        mNumberPickerR.setValue(255);
         mNumberPickerR.setWrapSelectorWheel(true);
+        mNumberPickerR.setOnLongPressUpdateInterval(50);
+        rVal = mNumberPickerR.getValue();
+
         mNumberPickerR.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -41,10 +45,14 @@ public class ColorPickerAppActivity extends Activity {
             }
         });
 
-        // NumberPicker for Green color value
+/**************************************************************************************************/
         mNumberPickerG.setMaxValue(255);
         mNumberPickerG.setMinValue(0);
+        mNumberPickerG.setValue(255);
         mNumberPickerG.setWrapSelectorWheel(true);
+        mNumberPickerG.setOnLongPressUpdateInterval(50);
+        gVal = mNumberPickerG.getValue();
+
         mNumberPickerG.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -52,11 +60,16 @@ public class ColorPickerAppActivity extends Activity {
                 setColor(rVal, gVal, bVal);
             }
         });
+/**************************************************************************************************/
 
-        // NumberPicker for Blue color value
+
         mNumberPickerB.setMaxValue(255);
         mNumberPickerB.setMinValue(0);
+        mNumberPickerB.setValue(255);
         mNumberPickerB.setWrapSelectorWheel(true);
+        mNumberPickerB.setOnLongPressUpdateInterval(50);
+        bVal = mNumberPickerB.getValue();
+
         mNumberPickerB.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -64,35 +77,37 @@ public class ColorPickerAppActivity extends Activity {
                 setColor(rVal, gVal, bVal);
             }
         });
+/**************************************************************************************************/
 
-        // Button to select chosen color and send color-value via intent
         mButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                    // Making an intent to the Photo Tinter. It will send one color at
-                    Intent i = new Intent();
-                    i.putExtra(TintFragment.EXTRA_COLOR, getColor());
-                    setResult(RESULT_OK, i);
-                    finish();
 
-                }
+                // Making an intent to the Photo Tinter client. It will send one color at a time
+                Intent i = new Intent();
+                i.putExtra(TintFragment.EXTRA_COLOR, getColor());
+                setResult(RESULT_OK, i);
+                finish();
+
+
+            }
+
         });
+
+        //Setting default color to default values.
+        setColor(rVal, gVal, bVal);
 
     }//end onCreate
 
-    //  Changes/Overrides color of preview pallet
+/**************************************************************************************************/
     private void setColor(int rVal, int gVal, int bVal) {
         Log.i("SettingColor", "Red: " + rVal + " Green: " + gVal + " Blue: " + bVal);
         color = Color.rgb(rVal, gVal, bVal);
         View bgElement = findViewById(R.id.myRectangleView);
         bgElement.setBackgroundColor(color);
-    }
 
-    // Get/Return integer color value of selected color
-    public int getColor() {
-        return color;
     }
 
     @Override
@@ -102,6 +117,7 @@ public class ColorPickerAppActivity extends Activity {
         return true;
     }
 
+/**************************************************************************************************/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -116,6 +132,12 @@ public class ColorPickerAppActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+    public int getColor() {
+        return color;
+    }
+
 
 
 }
