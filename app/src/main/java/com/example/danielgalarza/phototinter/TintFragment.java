@@ -32,8 +32,6 @@ public class TintFragment extends Fragment {  //extends Fragment
     private Button mTintButton;
     private Button mButtonColor1;
     private Button mButtonColor2;
-    private int mColor1;
-    private int mColor2;
 
     private SeekBar mBlender;
     private TextView mBlendedColor;
@@ -243,7 +241,6 @@ public class TintFragment extends Fragment {  //extends Fragment
                     colorOne = data.getIntExtra(EXTRA_COLOR, defaultColorOne);
                     //update left button (1) color
                     mButtonColor1.setBackgroundColor(colorOne);
-                    // TODO: UPDATE COLOR SWATCH
                     update(mBlender);
                     break;
 
@@ -252,7 +249,6 @@ public class TintFragment extends Fragment {  //extends Fragment
                     colorTwo = data.getIntExtra(EXTRA_COLOR, defaultColorTwo);
                     //update right button (2) color
                     mButtonColor2.setBackgroundColor(colorTwo);
-                    // TODO: UPDATE COLOR SWATCH
                     update(mBlender);
                     break;
             }
