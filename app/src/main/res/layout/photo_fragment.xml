@@ -145,6 +145,16 @@
                 android:weightSum="1"
                 android:background="#eaff5e">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Choose From Preset Tints Here!"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="#030303"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="16sp"
+                    android:id="@+id/textView"/>
+
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

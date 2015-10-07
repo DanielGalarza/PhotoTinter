@@ -49,9 +49,7 @@ public class ColorLab {
                 case 5 : c.setTitle("Yellow Tint");
                         c.setColor(c.makeColorWithAlpha(127, 255, 255, 0));
                         break;
-                case 6 : Random r = new Random();
-                        c.setTitle("Random Tint");
-                        c.setColor(c.makeColorWithAlpha(127, r.nextInt(256), r.nextInt(256), r.nextInt(256)));
+                case 6 : c.setTitle("Random Tint");
                         break;
             }
 

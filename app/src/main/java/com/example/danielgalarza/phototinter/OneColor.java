@@ -2,6 +2,8 @@ package com.example.danielgalarza.phototinter;
 
 import android.graphics.Color;
 
+import java.util.Random;
+
 /**
  * Created by danielgalarza on 9/30/15.
  */
@@ -28,6 +30,11 @@ public class OneColor {
 
     public int makeColorWithAlpha(int a, int r, int g, int b) {
         return Color.argb(a, r, g, b);
+    }
+
+    public int makeRandomColor() {
+        Random r = new Random();
+        return Color.argb(127, r.nextInt(256), r.nextInt(256), r.nextInt(256));
     }
 
 

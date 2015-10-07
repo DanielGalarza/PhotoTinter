@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by danielgalarza on 9/30/15.
@@ -258,7 +259,8 @@ public class TintFragment extends Fragment {  //extends Fragment
             @Override
             public void onClick(View view) {
 
-                int color = addAlphaToColor(mColors.get(6).getColor());
+                OneColor c = new OneColor();
+                int color = c.makeRandomColor();
                 mImageView.setColorFilter(color);
                 mBlendedColorSwatch.setBackgroundColor(color);
 
