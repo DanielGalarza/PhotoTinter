@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,8 @@ public class TintFragment extends Fragment {  //extends Fragment
     private Button mButtonColor2;
 
     private SeekBar mBlender;
-    private TextView mBlendedColor;
+    private TextView mBlendedColorSwatch;
+    private int mBlendedColor;
 
     private Button mBlueTint;
     private Button mGrayTint;
@@ -80,15 +80,15 @@ public class TintFragment extends Fragment {  //extends Fragment
         // Used to inflate the layout (view) of the fragment containing the UI.
         View v = inflater.inflate(R.layout.photo_fragment, parent, false);
 
-        // Link mBlendedColor to color swatch 'blended_color' view
-        mBlendedColor = (TextView) v.findViewById(R.id.blended_color);
+        // Link mBlendedColorSwatch to color swatch 'blended_color' view
+        mBlendedColorSwatch = (TextView) v.findViewById(R.id.blended_color);
 
         // Link mImageView to the image display view/area
         mImageView = (ImageView)v.findViewById(R.id.photo);
 
         /**********************************************************************************
          * BUTTON ADD PHOTO - LAUNCHES IMAGE CHOOSER - WAIT FOR RESPONSE INTENT
-         * *********************************************************************************/
+         **********************************************************************************/
         mPhotoChooser = (Button)v.findViewById(R.id.photo_button);
         mPhotoChooser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,8 +103,18 @@ public class TintFragment extends Fragment {  //extends Fragment
         });
         /*********************************************************************************
          * BUTTON TINT - ADD TINT TO PHOTO
+         *
+         *
+         *    ! ! ! ! ! ! NOT TESTED ! ! ! ! ! !
+         *
          **********************************************************************************/
         mTintButton = (Button)v.findViewById(R.id.tint_button);
+        mTintButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mImageView.setColorFilter(mBlendedColor);
+            }
+        });
 
         /**********************************************************************************
          * BUTTON LEFT: CHOOSE COLOR #1 - LAUNCH COLOR-PICKER - WAIT FOR RESPONSE INTENT
@@ -173,30 +183,30 @@ public class TintFragment extends Fragment {  //extends Fragment
 
         return v;
 
-    }/*** END UI CONTENTS *** END onCreateView() ***/
+    }//*** END UI CONTENTS *** END onCreateView() ***/
 
 
-    /******************************************
-     * UPDATE COLOR OF TEXT-VIEW COLOR PALLET *
-     ******************************************/
+    /**************************************************************
+     ******* UPDATE COLOR OF TEXT-VIEW BLENDED COLOR SWATCH *******
+     **************************************************************/
     private void update(final SeekBar mBlender) {
 
-        mBlendedColor = (TextView) mBlendedColor.findViewById(R.id.blended_color);
+        mBlendedColorSwatch = (TextView) mBlendedColorSwatch.findViewById(R.id.blended_color);
 
         final int colorStart = colorOne;
         final int colorEnd = colorTwo;
-
-        mBlendedColor.setBackgroundColor(interpolateColor(colorStart, colorEnd, mBlender.getProgress() / 100f));
-
+        mBlendedColor = interpolateColor(colorStart, colorEnd, mBlender.getProgress() / 100f);
+        mBlendedColorSwatch.setBackgroundColor(mBlendedColor);
     }
 
     /**************************************************************
      * COLOR BLENDING HANDLED BY THE NEXT TWO INTERPOLATE METHODS *
+     *                                                            *
+     * Source:  http://stackoverflow.com/a/7871291                *
      **************************************************************/
     private float interpolate(final float a, final float b, final float proportion){
         return (a + ((b-a) * proportion));
     }
-
     private int interpolateColor(final int a, final int b, final float proportion){
         final float[] hsva = new float[3];
         final float[] hsvb = new float[3];
@@ -207,7 +217,8 @@ public class TintFragment extends Fragment {  //extends Fragment
         }
         return Color.HSVToColor(hsvb);
     }
-    /********* END COLOR BLEND - INTERPOLATION ALGORITHM *********/
+    //********* END COLOR BLEND - INTERPOLATION ALGORITHM *********/
+
 
     /**************************************************************
      ******** HANDLE INTENTS FOR MULTIPLE REQUEST-CODES ***********
@@ -254,6 +265,6 @@ public class TintFragment extends Fragment {  //extends Fragment
 
         }
     }// END onActivityResult
-    /**********  END REQUEST-CODE LOGIC - INTENT HANDLER **********/
+    //**********  END REQUEST-CODE LOGIC - INTENT HANDLER **********/
 
 }// END MAIN: TintFragment
