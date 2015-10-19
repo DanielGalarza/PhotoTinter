@@ -370,7 +370,7 @@ public class TintFragment extends Fragment {  //extends Fragment
      ****************************************************************************/
     public int addAlphaToColor(int color) {
 
-        int a = 127;
+        int a = 100;
         int r = Color.red(color);
         int g = Color.green(color);
         int b = Color.blue(color);
